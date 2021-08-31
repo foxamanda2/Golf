@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 export function Scores() {
   const [scores, setScores] = useState([])
@@ -44,6 +45,11 @@ export function Scores() {
       async function loadScores() {
         let url = '/api/Player'
 
+        // const url =
+        //   filterText.length === 0
+        //     ? '/api/Player'
+        //     : `/api/Player?filter=${filterText}`
+
         if (filterText.length > 0) {
           url = `/api/Player?filter=${filterText}`
         }
@@ -55,6 +61,18 @@ export function Scores() {
     },
     [filterText]
   )
+  // Front end filtering
+  //Make new array from the list of scores, but only average scores over 20
+  // const playerWhoseScoreIsOver20 = scores.filter(
+  //   (score) => score.averageScore > 20
+  // )
+
+  // const filteredPlayers = scores.filter((score) =>
+  // scores.firstName.toLowerCase().includes(filterText))
+
+  // console.log(playerWhoseScoreIsOver20)
+
+  //Can map players that are over a 2
 
   return (
     <>
@@ -74,7 +92,9 @@ export function Scores() {
           <option value="name3">Smith, Sarah </option>
           <option value="name4">Smith, Sam </option>
         </select>
-        <button className="col">New Player</button>
+        <Link to="/newplayer">
+          <button className="col">New Player</button>
+        </Link>
       </div>
       <ul className="playerlist">
         {scores.map(function (player) {
