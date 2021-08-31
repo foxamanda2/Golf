@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 export function Scores() {
   const [scores, setScores] = useState([])
+  const [filterText, setFilterText] = useState('')
   // {
   //   id: 1,
   //   firstName: 'Gracie',
@@ -38,19 +39,35 @@ export function Scores() {
   //   date: '2021-06-08T00:00:00',
   // },
 
-  useEffect(function () {
-    async function loadScores() {
-      const response = await fetch('/api/Player')
-      const json = await response.json()
-      setScores(json)
-    }
-    loadScores()
-  }, [])
+  useEffect(
+    function () {
+      async function loadScores() {
+        let url = '/api/Player'
+
+        if (filterText.length > 0) {
+          url = `/api/Player?filter=${filterText}`
+        }
+        const response = await fetch(url)
+        const json = await response.json()
+        setScores(json)
+      }
+      loadScores()
+    },
+    [filterText]
+  )
 
   return (
     <>
       <div className="row">
-        <input type="text" placeholder="Search" className="col" />
+        <input
+          type="text"
+          placeholder="Search"
+          className="col"
+          value={filterText}
+          onChange={function (event) {
+            setFilterText(event.target.value)
+          }}
+        />
         <select name="namesearch" id="namesearch" className="col">
           <option value="name1">Doe, John </option>
           <option value="name2">Doe, Jane </option>

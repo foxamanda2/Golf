@@ -31,11 +31,26 @@ namespace Golf.Controllers
         // Returns a list of all your Players
         //
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
+        public async Task<ActionResult<IEnumerable<Player>>> GetPlayers(string filter)
         {
-            // Uses the database context in `_context` to request all of the Players, sort
-            // them by row id and return them as a JSON array.
-            return await _context.Players.OrderBy(row => row.Id).ToListAsync();
+            if (filter == null)
+            {
+
+
+                // Uses the database context in `_context` to request all of the Players, sort
+                // them by row id and return them as a JSON array.
+                return await _context.Players.OrderBy(row => row.Id).ToListAsync();
+            }
+            else
+            {
+                return await _context.
+                                Players.
+                                Where(player =>
+                                        player.FirstName.ToLower().Contains(filter.ToLower()) ||
+                                        player.LastName.ToLower().Contains(filter.ToLower()))
+                                        .OrderBy(row => row.Id).
+                                        ToListAsync();
+            }
         }
 
         // GET: api/Player/5
